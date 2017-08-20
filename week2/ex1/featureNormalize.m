@@ -25,21 +25,15 @@ sigma = zeros(1, size(X, 2));
 %
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
-%for i=1:size(X, 2)
-  
-  
-%end;
 
-%mu = mean(X)
+mu = mean(X);
 
-%z = max(X) - min(X)
+%z = max(X) - min(X); -- this expression used for quizes
+z = std(X)
 
-
-
-
-
-
-
+for i=1:size(X, 2)
+  X_norm(:, i) = (X_norm(:, i) - mu(i)) / z(i);
+end;
 
 % ============================================================
 
