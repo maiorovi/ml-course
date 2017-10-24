@@ -21,8 +21,6 @@ Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
 
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
-size(Theta1)
-size(Theta2)
 % Setup some useful variables
 m = size(X, 1);
 L = 2;
@@ -98,9 +96,27 @@ J = J + regularization;
 % -------------------------------------------------------------
 
 % =========================================================================
+delta_f_1 = zeros(size(Theta2, 2) - 1, size(Theta1, 2)); % l = 1 m x 
+delta_f_2 = zeros(size(Theta2, 1), size(Theta2, 2));
+for i=1:m
+  a_1 = [1,X(i,:)]; %a_1 = 1x401
+  z_2 = Theta1 * a_1'; % Theta1(i) =  25 x 401; z = 25 x 1
+  a_2 = [1,sigmoid(z_2)']'; % 25x1
+  z_3 = Theta2 * a_2; % Theta2 = 10 x 26
+  a_3 = sigmoid(z_3); % a_3 = 10 x 1
+  delta_3 = a_3 - yMod(i,:)'; % delta3 = 10 x 1
+  delta_2 = (Theta2(:,2:end)' * delta_3) .* sigmoidGradient(z_2); %delta = 25x1
+  %Theta2' * delta_3 =  25 x 10 *  10 x 1 = 25_1 .* 25_1
+  delta_f_1 = delta_f_1 + delta_2 * a_1; % delta_f_1 = 25x 1 * 1 x 401 = 25 x 401 
+  %size(delta_f_1)
+  delta_f_2 = delta_f_2 + delta_3 * (a_2)'; % delta_f_2 = 10 x 1 * 26x1 = 10 x 26
+  % 10 x 1 * 25 x 1 = 10 x 25
+end
+
+Theta1_grad=delta_f_1 ./ m;
+Theta2_grad= delta_f_2 ./ m;
 
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
 
 end
