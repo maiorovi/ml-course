@@ -113,6 +113,19 @@ for i=1:m
   % 10 x 1 * 25 x 1 = 10 x 25
 end
 
+
+for i= 1:size(Theta1,1)
+  for j = 2:size(Theta1,2)
+    delta_f_1(i,j) = delta_f_1(i,j) + lambda * Theta1(i,j);
+  end
+end
+
+for i= 1:size(Theta2,1)
+  for j = 2: size(Theta2, 2)
+    delta_f_2(i,j) = delta_f_2(i,j) + lambda * Theta2(i,j);
+  end
+end
+
 Theta1_grad=delta_f_1 ./ m;
 Theta2_grad= delta_f_2 ./ m;
 
